@@ -1,0 +1,66 @@
+package za.ac.cput.service;
+
+// SubjectService.java
+// Service class for Subject
+// Author: Reotshepile Stock (230875807)
+// Date: 10 September 2026
+
+import za.ac.cput.domain.Subject;
+import za.ac.cput.repository.SubjectRepository;
+
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class SubjectService {
+
+    private final SubjectRepository repository;
+
+    public SubjectService(SubjectRepository repository) {
+        this.repository = repository;
+    }
+
+    public Subject create(Subject subject) {
+        return repository.save(subject);
+    }
+
+    public Subject read(Long id) {
+        return repository.findById(id)
+                .orElse(null);
+    }
+
+    public List<Subject> getAll() {
+        return repository.findAll();
+    }
+
+    public Subject update(Long id, Subject subject) {
+
+        Subject existing = read(id);
+
+        if (existing == null) {
+            return null;
+        }
+
+        Subject updated = new Subject.Builder()
+                .copy(existing)
+                .setSubjectName(subject.getSubjectName())
+                .setSubjectCode(subject.getSubjectCode())
+                .setDepartment(subject.getDepartment())
+                .build();
+
+        return repository.save(updated);
+    }
+
+    public boolean delete(Long id) {
+
+        Subject existing = read(id);
+
+        if (existing == null) {
+            return false;
+        }
+
+        repository.delete(existing);
+        return true;
+    }
+}
