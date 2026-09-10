@@ -1,0 +1,29 @@
+package za.ac.cput.repository;
+
+// BookingRequestRepository.java
+// Repository interface for BookingRequest
+// Author: Reotshepile Stock (230875807)
+// Date: 10 September 2026
+
+import za.ac.cput.domain.BookingRequest;
+import za.ac.cput.domain.BookingStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface BookingRequestRepository
+        extends JpaRepository<BookingRequest, Long> {
+
+    List<BookingRequest> findByStudentId(Long studentId);
+
+    List<BookingRequest> findByTutorProfileId(
+            Long tutorProfileId);
+
+    List<BookingRequest> findBySubjectId(
+            Long subjectId);
+
+    List<BookingRequest> findByStatus(
+            BookingStatus status);
+}
