@@ -1,0 +1,135 @@
+package za.ac.cput.service;
+
+// BookingRequestService.java
+// Service class for BookingRequest
+// Author: Reotshepile Stock (230875807)
+// Date: 10 September 2026
+
+import za.ac.cput.domain.BookingRequest;
+import za.ac.cput.domain.BookingStatus;
+import za.ac.cput.repository.BookingRequestRepository;
+
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+public class BookingRequestService {
+
+    private final BookingRequestRepository repository;
+
+    public BookingRequestService(
+            BookingRequestRepository repository) {
+
+        this.repository = repository;
+    }
+
+    public BookingRequest create(
+            BookingRequest bookingRequest) {
+
+        return repository.save(bookingRequest);
+    }
+
+    public BookingRequest read(Long id) {
+
+        return repository.findById(id)
+                .orElse(null);
+    }
+
+    public List<BookingRequest> getAll() {
+        return repository.findAll();
+    }
+
+    public List<BookingRequest> getByStudent(
+            Long studentId) {
+
+        return repository.findByStudentId(studentId);
+    }
+
+    public List<BookingRequest> getByTutor(
+            Long tutorProfileId) {
+
+        return repository.findByTutorProfileId(
+                tutorProfileId);
+    }
+
+    public List<BookingRequest> getBySubject(
+            Long subjectId) {
+
+        return repository.findBySubjectId(subjectId);
+    }
+
+    public List<BookingRequest> getByStatus(
+            BookingStatus status) {
+
+        return repository.findByStatus(status);
+    }
+
+    public BookingRequest updateStatus(
+            Long id,
+            BookingStatus status) {
+
+        BookingRequest existing = read(id);
+
+        if (existing == null) {
+            return null;
+        }
+
+        BookingRequest updated =
+                new BookingRequest.Builder()
+                        .copy(existing)
+                        .setStatus(status)
+                        .setUpdatedAt(LocalDateTime.now())
+                        .build();
+
+        return repository.save(updated);
+    }
+
+    public BookingRequest update(
+            Long id,
+            BookingRequest bookingRequest) {
+
+        BookingRequest existing = read(id);
+
+        if (existing == null) {
+            return null;
+        }
+
+        BookingRequest updated =
+                new BookingRequest.Builder()
+                        .copy(existing)
+                        .setStudentId(
+                                bookingRequest.getStudentId())
+                        .setTutorProfileId(
+                                bookingRequest.getTutorProfileId())
+                        .setSubjectId(
+                                bookingRequest.getSubjectId())
+                        .setRequestedStartTime(
+                                bookingRequest
+                                        .getRequestedStartTime())
+                        .setDurationMinutes(
+                                bookingRequest
+                                        .getDurationMinutes())
+                        .setStatus(
+                                bookingRequest.getStatus())
+                        .setStudentNotes(
+                                bookingRequest.getStudentNotes())
+                        .setUpdatedAt(LocalDateTime.now())
+                        .build();
+
+        return repository.save(updated);
+    }
+
+    public boolean delete(Long id) {
+
+        BookingRequest existing = read(id);
+
+        if (existing == null) {
+            return false;
+        }
+
+        repository.delete(existing);
+        return true;
+    }
+}
