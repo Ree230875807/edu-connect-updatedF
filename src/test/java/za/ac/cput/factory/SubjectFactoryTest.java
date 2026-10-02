@@ -1,7 +1,7 @@
 /*
     SubjectFactoryTest.java
     Subject Factory Test class
-    Author: Reotshepile Stock
+    Author: Reotshepile Kopano Stock
     Date: 02 October 2026
 */
 package za.ac.cput.factory;
